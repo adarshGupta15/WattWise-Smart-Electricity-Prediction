@@ -1,6 +1,4 @@
-# WattWise – Smart Household Electricity Consumption & Bill Prediction System
 
-A production-quality machine learning system that predicts monthly household electricity consumption, bills, carbon emissions, and savings based on realistic appliance physics and household profiles.
 
 Built as a **B.Tech CSE Major Project** demonstrating end-to-end ML pipeline engineering, physics-based feature engineering, and modern full-stack development.
 
@@ -264,3 +262,4 @@ This project is developed for academic purposes as a B.Tech CSE Major Project.
 ## Author
 
 WattWise — Smart Energy Analytics Project, 2026
+
