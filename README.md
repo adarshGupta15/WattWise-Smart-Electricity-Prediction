@@ -261,5 +261,5 @@ This project is developed for academic purposes as a B.Tech CSE Major Project.
 
 ## Author
 
-WattWise — Smart Energy Analytics Project, 2026
+WattWise — Smart Energy Analytics Project, 2026 by Adarsh Gupta 
 
