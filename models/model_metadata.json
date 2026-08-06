@@ -1,0 +1,81 @@
+{
+  "best_model": "Linear Regression",
+  "r2_score": 0.9722,
+  "mae": 31.53,
+  "rmse": 51.8,
+  "feature_columns": [
+    "HouseType",
+    "Occupation",
+    "IncomeLevel",
+    "WorkFromHome",
+    "Season",
+    "FamilyMembers",
+    "Temperature",
+    "Humidity",
+    "ACCount",
+    "ACHours",
+    "FanCount",
+    "LightCount",
+    "LEDPercentage",
+    "Cooler",
+    "Geyser",
+    "Refrigerator",
+    "WashingMachine",
+    "LaptopHours",
+    "TVHours",
+    "PreviousMonthUnits",
+    "EstimatedBaseLoad"
+  ],
+  "categorical_features": [
+    "HouseType",
+    "Occupation",
+    "IncomeLevel",
+    "WorkFromHome",
+    "Season"
+  ],
+  "numeric_features": [
+    "FamilyMembers",
+    "Temperature",
+    "Humidity",
+    "ACCount",
+    "ACHours",
+    "FanCount",
+    "LightCount",
+    "LEDPercentage",
+    "Cooler",
+    "Geyser",
+    "Refrigerator",
+    "WashingMachine",
+    "LaptopHours",
+    "TVHours",
+    "PreviousMonthUnits",
+    "EstimatedBaseLoad"
+  ],
+  "target": "MonthlyUnits",
+  "all_results": [
+    {
+      "name": "Linear Regression",
+      "r2": 0.9722,
+      "mae": 31.53,
+      "rmse": 51.8
+    },
+    {
+      "name": "Decision Tree",
+      "r2": 0.9563,
+      "mae": 36.45,
+      "rmse": 64.9
+    },
+    {
+      "name": "Random Forest",
+      "r2": 0.97,
+      "mae": 32.13,
+      "rmse": 53.74
+    },
+    {
+      "name": "Gradient Boosting",
+      "r2": 0.9684,
+      "mae": 32.05,
+      "rmse": 55.19
+    }
+  ]
+}

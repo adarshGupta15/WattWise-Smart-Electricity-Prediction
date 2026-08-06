@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WattWise – Smart Electricity Prediction</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+</head>
+<body>
+    <div class="bg-gradient"></div>
+    <div class="bg-orbs">
+        <div class="orb orb-1"></div>
+        <div class="orb orb-2"></div>
+        <div class="orb orb-3"></div>
+    </div>
+
+    <header class="header">
+        <div class="logo">
+            <span class="logo-icon">⚡</span>
+            <div>
+                <h1>WattWise</h1>
+                <p>Smart Household Electricity Prediction</p>
+            </div>
+        </div>
+        {% if metadata and metadata.best_model %}
+        <div class="model-badge">
+            <span class="badge-dot"></span>
+            {{ metadata.best_model }}
+        </div>
+        {% endif %}
+    </header>
+
+    <main class="container">
+        <section class="form-section glass-card">
+            <h2>Household Profile</h2>
+            <p class="section-subtitle">Enter your household details for accurate consumption prediction</p>
+
+            <form id="predictionForm" novalidate>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="FamilyMembers">Family Members</label>
+                        <input type="number" id="FamilyMembers" name="FamilyMembers" min="1" max="8" value="4" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="HouseType">House Type</label>
+                        <select id="HouseType" name="HouseType" required>
+                            {% for opt in options.HouseType %}
+                            <option value="{{ opt }}" {% if opt == '2BHK' %}selected{% endif %}>{{ opt }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="Occupation">Occupation</label>
+                        <select id="Occupation" name="Occupation" required>
+                            {% for opt in options.Occupation %}
+                            <option value="{{ opt }}" {% if opt == 'Employed' %}selected{% endif %}>{{ opt }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="IncomeLevel">Income Level</label>
+                        <select id="IncomeLevel" name="IncomeLevel" required>
+                            {% for opt in options.IncomeLevel %}
+                            <option value="{{ opt }}" {% if opt == 'Medium' %}selected{% endif %}>{{ opt }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="WorkFromHome">Work From Home</label>
+                        <select id="WorkFromHome" name="WorkFromHome" required>
+                            {% for opt in options.WorkFromHome %}
+                            <option value="{{ opt }}" {% if opt == 'Partial' %}selected{% endif %}>{{ opt }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="Season">Season</label>
+                        <select id="Season" name="Season" required>
+                            {% for opt in options.Season %}
+                            <option value="{{ opt }}" {% if opt == 'Summer' %}selected{% endif %}>{{ opt }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="Temperature">Temperature (°C)</label>
+                        <input type="number" id="Temperature" name="Temperature" min="5" max="48" step="0.1" value="35" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="Humidity">Humidity (%)</label>
+                        <input type="number" id="Humidity" name="Humidity" min="20" max="95" step="0.1" value="65" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="ACCount">AC Count</label>
+                        <input type="number" id="ACCount" name="ACCount" min="0" max="4" value="1" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="ACHours">AC Hours / Day</label>
+                        <input type="number" id="ACHours" name="ACHours" min="0" max="16" step="0.5" value="6" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="FanCount">Fan Count</label>
+                        <input type="number" id="FanCount" name="FanCount" min="1" max="10" value="4" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="LightCount">Light Count</label>
+                        <input type="number" id="LightCount" name="LightCount" min="4" max="20" value="8" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="LEDPercentage">LED Percentage (%)</label>
+                        <input type="range" id="LEDPercentage" name="LEDPercentage" min="0" max="100" value="60">
+                        <span class="range-value" id="LEDValue">60%</span>
+                    </div>
+                    <div class="form-group checkbox-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="Cooler" name="Cooler" value="1">
+                            <span>Cooler</span>
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="Geyser" name="Geyser" value="1" checked>
+                            <span>Geyser</span>
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="Refrigerator" name="Refrigerator" value="1" checked disabled>
+                            <span>Refrigerator</span>
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="WashingMachine" name="WashingMachine" value="1" checked>
+                            <span>Washing Machine</span>
+                        </label>
+                    </div>
+                    <div class="form-group">
+                        <label for="LaptopHours">Laptop Hours / Day</label>
+                        <input type="number" id="LaptopHours" name="LaptopHours" min="0" max="16" step="0.5" value="4" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="TVHours">TV Hours / Day</label>
+                        <input type="number" id="TVHours" name="TVHours" min="0" max="12" step="0.5" value="3" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="PreviousMonthUnits">Previous Month Units (kWh)</label>
+                        <input type="number" id="PreviousMonthUnits" name="PreviousMonthUnits" min="50" max="2000" value="250" required>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn-predict" id="predictBtn">
+                    <span class="btn-text">Predict Consumption</span>
+                    <span class="btn-loader hidden" id="btnLoader"></span>
+                </button>
+            </form>
+        </section>
+
+        <section class="results-section hidden" id="resultsSection">
+            <div class="results-header">
+                <h2>Prediction Dashboard</h2>
+                <p id="modelUsed"></p>
+            </div>
+
+            <div class="metrics-grid">
+                <div class="metric-card glass-card accent-blue">
+                    <div class="metric-icon">🔌</div>
+                    <div class="metric-value" id="monthlyUnits">—</div>
+                    <div class="metric-label">Monthly Units (kWh)</div>
+                </div>
+                <div class="metric-card glass-card accent-green">
+                    <div class="metric-icon">💰</div>
+                    <div class="metric-value" id="electricityBill">—</div>
+                    <div class="metric-label">Electricity Bill (₹)</div>
+                </div>
+                <div class="metric-card glass-card accent-orange">
+                    <div class="metric-icon">🌿</div>
+                    <div class="metric-value" id="carbonEmission">—</div>
+                    <div class="metric-label">Carbon Emission (kg CO₂)</div>
+                </div>
+                <div class="metric-card glass-card accent-purple">
+                    <div class="metric-icon">💡</div>
+                    <div class="metric-value" id="monthlySavings">—</div>
+                    <div class="metric-label">Potential Savings (₹)</div>
+                </div>
+            </div>
+
+            <div class="category-banner glass-card" id="categoryBanner">
+                <span class="category-label">Consumption Category</span>
+                <span class="category-value" id="consumptionCategory">—</span>
+            </div>
+
+            <div class="dashboard-grid">
+                <div class="chart-card glass-card">
+                    <h3>Usage Breakdown</h3>
+                    <div class="chart-container">
+                        <canvas id="usageChart"></canvas>
+                    </div>
+                </div>
+                <div class="chart-card glass-card">
+                    <h3>Daily Load Profile</h3>
+                    <div class="chart-container">
+                        <canvas id="dailyChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <div class="reasons-card glass-card">
+                <h3>Prediction Insights</h3>
+                <div id="reasonsList" class="reasons-list"></div>
+            </div>
+
+            <div class="base-load-card glass-card">
+                <div class="base-load-info">
+                    <span>Physics-Based Base Estimate</span>
+                    <strong id="baseLoad">—</strong>
+                </div>
+                <div class="base-load-bar">
+                    <div class="base-load-fill" id="baseLoadFill"></div>
+                </div>
+            </div>
+        </section>
+
+        <div class="error-toast hidden" id="errorToast">
+            <span id="errorMessage"></span>
+            <button onclick="hideError()">✕</button>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <p>WattWise &copy; 2026 — B.Tech CSE Major Project | Smart Energy Analytics</p>
+    </footer>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
