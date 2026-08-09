@@ -1,5 +1,7 @@
 
+## Live Demo
 
+🔗 **Live Application:** https://wattwise-smart-electricity-prediction.onrender.com
 Built as a **B.Tech CSE Major Project** demonstrating end-to-end ML pipeline engineering, physics-based feature engineering, and modern full-stack development.
 
 ---
