@@ -57,6 +57,10 @@ def load_model():
     if os.path.exists(METADATA_PATH):
         with open(METADATA_PATH) as f:
             metadata = json.load(f)
+load_model()
+
+
+
 
 
 def compute_estimated_base_load(data: dict) -> float:
